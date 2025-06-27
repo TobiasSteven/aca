@@ -1,6 +1,6 @@
 <?php
 /**
- * Fonctions du thème ACA
+ * Fonctions du thème ACA - Système de blocs complet
  */
 
 // Sécurité
@@ -23,9 +23,44 @@ function aca_theme_setup() {
     add_theme_support('custom-logo');
     add_theme_support('customize-selective-refresh-widgets');
     add_theme_support('align-wide');
+    add_theme_support('align-full');
     add_theme_support('wp-block-styles');
     add_theme_support('responsive-embeds');
     add_theme_support('editor-styles');
+    
+    // Couleurs personnalisées pour l'éditeur
+    add_theme_support('editor-color-palette', array(
+        array(
+            'name' => 'ACA Primary',
+            'slug' => 'aca-primary',
+            'color' => '#2D9B8A',
+        ),
+        array(
+            'name' => 'ACA Primary Dark',
+            'slug' => 'aca-primary-dark',
+            'color' => '#1F6B5C',
+        ),
+        array(
+            'name' => 'ACA Secondary',
+            'slug' => 'aca-secondary',
+            'color' => '#A8E6CF',
+        ),
+        array(
+            'name' => 'ACA Success',
+            'slug' => 'aca-success',
+            'color' => '#28A745',
+        ),
+        array(
+            'name' => 'ACA Warning',
+            'slug' => 'aca-warning',
+            'color' => '#FD7E14',
+        ),
+        array(
+            'name' => 'ACA Danger',
+            'slug' => 'aca-danger',
+            'color' => '#DC3545',
+        ),
+    ));
     
     // Menus
     register_nav_menus(array(
@@ -60,120 +95,103 @@ add_action('wp_enqueue_scripts', 'aca_theme_scripts');
 
 // Enqueue des styles pour l'éditeur
 function aca_editor_styles() {
-    add_editor_style('assets/css/editor-style.css');
+    add_editor_style('assets/css/blocks.css');
+    add_editor_style('style.css');
 }
 add_action('admin_init', 'aca_editor_styles');
 
-// Widgets
-function aca_widgets_init() {
-    register_sidebar(array(
-        'name'          => __('Sidebar Principal', 'aca-theme'),
-        'id'            => 'sidebar-1',
-        'description'   => __('Widgets pour la sidebar principale', 'aca-theme'),
-        'before_widget' => '<div id="%1$s" class="widget %2$s">',
-        'after_widget'  => '</div>',
-        'before_title'  => '<h3 class="widget-title">',
-        'after_title'   => '</h3>',
-    ));
-    
-    register_sidebar(array(
-        'name'          => __('Footer 1', 'aca-theme'),
-        'id'            => 'footer-1',
-        'description'   => __('Première colonne du footer', 'aca-theme'),
-        'before_widget' => '<div id="%1$s" class="widget %2$s">',
-        'after_widget'  => '</div>',
-        'before_title'  => '<h4 class="widget-title">',
-        'after_title'   => '</h4>',
-    ));
-    
-    register_sidebar(array(
-        'name'          => __('Footer 2', 'aca-theme'),
-        'id'            => 'footer-2',
-        'description'   => __('Deuxième colonne du footer', 'aca-theme'),
-        'before_widget' => '<div id="%1$s" class="widget %2$s">',
-        'after_widget'  => '</div>',
-        'before_title'  => '<h4 class="widget-title">',
-        'after_title'   => '</h4>',
-    ));
-    
-    register_sidebar(array(
-        'name'          => __('Footer 3', 'aca-theme'),
-        'id'            => 'footer-3',
-        'description'   => __('Troisième colonne du footer', 'aca-theme'),
-        'before_widget' => '<div id="%1$s" class="widget %2$s">',
-        'after_widget'  => '</div>',
-        'before_title'  => '<h4 class="widget-title">',
-        'after_title'   => '</h4>',
-    ));
-    
-    register_sidebar(array(
-        'name'          => __('Footer 4', 'aca-theme'),
-        'id'            => 'footer-4',
-        'description'   => __('Quatrième colonne du footer', 'aca-theme'),
-        'before_widget' => '<div id="%1$s" class="widget %2$s">',
-        'after_widget'  => '</div>',
-        'before_title'  => '<h4 class="widget-title">',
-        'after_title'   => '</h4>',
-    ));
-}
-add_action('widgets_init', 'aca_widgets_init');
-
 // Enregistrement des blocs personnalisés
 function aca_register_blocks() {
+    // Vérifier si Gutenberg est actif
+    if (!function_exists('register_block_type')) {
+        return;
+    }
+
     // Bloc Hero
     register_block_type('aca/hero', array(
-        'editor_script' => 'aca-blocks-editor',
-        'editor_style'  => 'aca-blocks-editor',
-        'style'         => 'aca-blocks',
         'render_callback' => 'aca_render_hero_block',
         'attributes' => array(
-            'title' => array(
-                'type' => 'string',
-                'default' => 'Promouvoir l\'Excellence Cotonnière en Afrique'
+            'slides' => array(
+                'type' => 'array',
+                'default' => array(
+                    array(
+                        'image' => 'https://images.pexels.com/photos/2132250/pexels-photo-2132250.jpeg?auto=compress&cs=tinysrgb&w=1920&h=600&fit=crop',
+                        'title' => 'Promouvoir l\'Excellence Cotonnière en Afrique',
+                        'subtitle' => 'Fédérer les acteurs de la filière coton pour un développement durable et inclusif du secteur en Afrique'
+                    ),
+                    array(
+                        'image' => 'https://images.pexels.com/photos/1595104/pexels-photo-1595104.jpeg?auto=compress&cs=tinysrgb&w=1920&h=600&fit=crop',
+                        'title' => 'Innovation et Durabilité',
+                        'subtitle' => 'Accompagner la transformation digitale et écologique de la filière cotonnière africaine'
+                    ),
+                    array(
+                        'image' => 'https://images.pexels.com/photos/1595108/pexels-photo-1595108.jpeg?auto=compress&cs=tinysrgb&w=1920&h=600&fit=crop',
+                        'title' => 'Réseau Continental',
+                        'subtitle' => 'Connecter producteurs, transformateurs et partenaires à travers tout le continent africain'
+                    )
+                )
             ),
-            'subtitle' => array(
-                'type' => 'string',
-                'default' => 'Fédérer les acteurs de la filière coton pour un développement durable'
+            'autoplay' => array(
+                'type' => 'boolean',
+                'default' => true
             ),
-            'backgroundImage' => array(
-                'type' => 'string',
-                'default' => ''
+            'showNavigation' => array(
+                'type' => 'boolean',
+                'default' => true
             ),
-            'buttonText' => array(
-                'type' => 'string',
-                'default' => 'Découvrir l\'ACA'
-            ),
-            'buttonUrl' => array(
-                'type' => 'string',
-                'default' => '#'
+            'showDots' => array(
+                'type' => 'boolean',
+                'default' => true
             )
         )
     ));
-    
+
     // Bloc Statistiques
     register_block_type('aca/stats', array(
-        'editor_script' => 'aca-blocks-editor',
-        'editor_style'  => 'aca-blocks-editor',
-        'style'         => 'aca-blocks',
         'render_callback' => 'aca_render_stats_block',
         'attributes' => array(
             'stats' => array(
                 'type' => 'array',
                 'default' => array(
-                    array('number' => '150', 'label' => 'Membres Actifs', 'suffix' => '+'),
-                    array('number' => '25', 'label' => 'Pays Représentés', 'suffix' => ''),
-                    array('number' => '2500', 'label' => 'Tonnes de Coton', 'suffix' => 'K'),
-                    array('number' => '45', 'label' => 'Projets en Cours', 'suffix' => '')
+                    array(
+                        'icon' => 'users',
+                        'number' => '150',
+                        'suffix' => '+',
+                        'label' => 'Membres Actifs',
+                        'color' => '#A8E6CF'
+                    ),
+                    array(
+                        'icon' => 'globe',
+                        'number' => '25',
+                        'suffix' => '',
+                        'label' => 'Pays Représentés',
+                        'color' => '#A8E6CF'
+                    ),
+                    array(
+                        'icon' => 'package',
+                        'number' => '2500',
+                        'suffix' => 'K',
+                        'label' => 'Tonnes de Coton',
+                        'color' => '#A8E6CF'
+                    ),
+                    array(
+                        'icon' => 'trending-up',
+                        'number' => '45',
+                        'suffix' => '',
+                        'label' => 'Projets en Cours',
+                        'color' => '#A8E6CF'
+                    )
                 )
+            ),
+            'animateOnScroll' => array(
+                'type' => 'boolean',
+                'default' => true
             )
         )
     ));
-    
+
     // Bloc Actualités
     register_block_type('aca/news', array(
-        'editor_script' => 'aca-blocks-editor',
-        'editor_style'  => 'aca-blocks-editor',
-        'style'         => 'aca-blocks',
         'render_callback' => 'aca_render_news_block',
         'attributes' => array(
             'title' => array(
@@ -182,7 +200,7 @@ function aca_register_blocks() {
             ),
             'subtitle' => array(
                 'type' => 'string',
-                'default' => 'Restez informé des dernières nouvelles'
+                'default' => 'Restez informé des dernières nouvelles et développements de la filière cotonnière africaine'
             ),
             'numberOfPosts' => array(
                 'type' => 'number',
@@ -191,58 +209,260 @@ function aca_register_blocks() {
             'category' => array(
                 'type' => 'string',
                 'default' => ''
+            ),
+            'showExcerpt' => array(
+                'type' => 'boolean',
+                'default' => true
+            ),
+            'showReadTime' => array(
+                'type' => 'boolean',
+                'default' => true
+            ),
+            'showCTA' => array(
+                'type' => 'boolean',
+                'default' => true
+            ),
+            'ctaText' => array(
+                'type' => 'string',
+                'default' => 'Voir toutes les actualités'
             )
         )
     ));
-    
-    // Bloc Équipe
-    register_block_type('aca/team', array(
-        'editor_script' => 'aca-blocks-editor',
-        'editor_style'  => 'aca-blocks-editor',
-        'style'         => 'aca-blocks',
-        'render_callback' => 'aca_render_team_block',
+
+    // Bloc Missions
+    register_block_type('aca/missions', array(
+        'render_callback' => 'aca_render_missions_block',
         'attributes' => array(
             'title' => array(
                 'type' => 'string',
-                'default' => 'Notre Équipe'
+                'default' => 'Nos Missions'
             ),
             'subtitle' => array(
                 'type' => 'string',
-                'default' => 'Des experts passionnés au service de l\'excellence'
+                'default' => 'L\'ACA s\'engage à transformer et développer la filière cotonnière africaine à travers trois axes stratégiques'
             ),
-            'members' => array(
+            'missions' => array(
                 'type' => 'array',
-                'default' => array()
+                'default' => array(
+                    array(
+                        'icon' => 'target',
+                        'title' => 'Promotion de la Filière Coton',
+                        'description' => 'Développer et promouvoir l\'excellence de la filière cotonnière africaine à travers des initiatives stratégiques et des partenariats durables.',
+                        'color' => '#A8E6CF'
+                    ),
+                    array(
+                        'icon' => 'users',
+                        'title' => 'Coopération entre Acteurs',
+                        'description' => 'Faciliter la collaboration entre producteurs, transformateurs, négociants et institutions pour renforcer l\'écosystème cotonnier.',
+                        'color' => '#A8E6CF'
+                    ),
+                    array(
+                        'icon' => 'trending-up',
+                        'title' => 'Valorisation des Productions',
+                        'description' => 'Accompagner la montée en gamme et l\'amélioration de la qualité des productions cotonnières africaines sur les marchés internationaux.',
+                        'color' => '#A8E6CF'
+                    )
+                )
+            ),
+            'showCTA' => array(
+                'type' => 'boolean',
+                'default' => true
+            ),
+            'ctaTitle' => array(
+                'type' => 'string',
+                'default' => 'Rejoignez Notre Mission'
+            ),
+            'ctaText' => array(
+                'type' => 'string',
+                'default' => 'Participez au développement de l\'excellence cotonnière africaine'
+            ),
+            'ctaButtonText' => array(
+                'type' => 'string',
+                'default' => 'Devenir Partenaire'
             )
         )
     ));
-    
-    // Bloc Contact
-    register_block_type('aca/contact', array(
-        'editor_script' => 'aca-blocks-editor',
-        'editor_style'  => 'aca-blocks-editor',
-        'style'         => 'aca-blocks',
-        'render_callback' => 'aca_render_contact_block',
+
+    // Bloc Événements
+    register_block_type('aca/events', array(
+        'render_callback' => 'aca_render_events_block',
         'attributes' => array(
             'title' => array(
                 'type' => 'string',
-                'default' => 'Contactez-nous'
+                'default' => 'Événements à Venir'
             ),
             'subtitle' => array(
                 'type' => 'string',
-                'default' => 'Notre équipe est à votre disposition'
+                'default' => 'Participez aux événements qui façonnent l\'avenir de la filière cotonnière africaine'
             ),
-            'email' => array(
-                'type' => 'string',
-                'default' => 'contact@aca-coton.org'
+            'numberOfEvents' => array(
+                'type' => 'number',
+                'default' => 3
             ),
-            'phone' => array(
-                'type' => 'string',
-                'default' => '+225 27 20 30 40 50'
+            'showCalendar' => array(
+                'type' => 'boolean',
+                'default' => true
             ),
-            'address' => array(
+            'events' => array(
+                'type' => 'array',
+                'default' => array(
+                    array(
+                        'date' => '2024-11-25',
+                        'title' => 'Forum International du Coton Africain',
+                        'location' => 'Abidjan, Côte d\'Ivoire',
+                        'time' => '09:00 - 17:00',
+                        'participants' => 150,
+                        'type' => 'Conférence',
+                        'status' => 'upcoming'
+                    ),
+                    array(
+                        'date' => '2024-12-05',
+                        'title' => 'Atelier Innovation Textile',
+                        'location' => 'Dakar, Sénégal',
+                        'time' => '14:00 - 18:00',
+                        'participants' => 80,
+                        'type' => 'Atelier',
+                        'status' => 'upcoming'
+                    ),
+                    array(
+                        'date' => '2024-12-15',
+                        'title' => 'Assemblée Générale ACA',
+                        'location' => 'Ouagadougou, Burkina Faso',
+                        'time' => '10:00 - 16:00',
+                        'participants' => 200,
+                        'type' => 'Assemblée',
+                        'status' => 'upcoming'
+                    )
+                )
+            )
+        )
+    ));
+
+    // Bloc Témoignages
+    register_block_type('aca/testimonials', array(
+        'render_callback' => 'aca_render_testimonials_block',
+        'attributes' => array(
+            'title' => array(
                 'type' => 'string',
-                'default' => '123 Avenue de l\'Indépendance, Abidjan'
+                'default' => 'Témoignages de nos Membres'
+            ),
+            'subtitle' => array(
+                'type' => 'string',
+                'default' => 'Découvrez comment l\'ACA accompagne ses membres vers l\'excellence'
+            ),
+            'testimonials' => array(
+                'type' => 'array',
+                'default' => array(
+                    array(
+                        'name' => 'Amadou Diallo',
+                        'position' => 'Directeur Général, CottonCorp Mali',
+                        'image' => 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop',
+                        'quote' => 'L\'ACA a transformé notre approche de la production cotonnière. Grâce à leur accompagnement, nous avons amélioré notre rendement de 40% en deux ans.',
+                        'country' => 'Mali'
+                    ),
+                    array(
+                        'name' => 'Fatima Ouedraogo',
+                        'position' => 'Présidente, Coopérative des Femmes Productrices',
+                        'image' => 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop',
+                        'quote' => 'Le réseau ACA nous permet d\'accéder à de nouveaux marchés et d\'échanger les meilleures pratiques avec nos homologues africains.',
+                        'country' => 'Burkina Faso'
+                    ),
+                    array(
+                        'name' => 'Jean-Baptiste Koffi',
+                        'position' => 'Responsable Innovation, TextileAfric',
+                        'image' => 'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop',
+                        'quote' => 'Les formations et les outils technologiques proposés par l\'ACA nous ont aidés à moderniser nos processus de transformation.',
+                        'country' => 'Côte d\'Ivoire'
+                    )
+                )
+            ),
+            'autoplay' => array(
+                'type' => 'boolean',
+                'default' => true
+            ),
+            'showPartners' => array(
+                'type' => 'boolean',
+                'default' => true
+            ),
+            'partners' => array(
+                'type' => 'array',
+                'default' => array(
+                    array('name' => 'AfDB', 'logo' => 'https://via.placeholder.com/120x60/2D9B8A/FFFFFF?text=AfDB'),
+                    array('name' => 'UEMOA', 'logo' => 'https://via.placeholder.com/120x60/2D9B8A/FFFFFF?text=UEMOA'),
+                    array('name' => 'CEDEAO', 'logo' => 'https://via.placeholder.com/120x60/2D9B8A/FFFFFF?text=CEDEAO'),
+                    array('name' => 'FAO', 'logo' => 'https://via.placeholder.com/120x60/2D9B8A/FFFFFF?text=FAO'),
+                    array('name' => 'ONUDI', 'logo' => 'https://via.placeholder.com/120x60/2D9B8A/FFFFFF?text=ONUDI'),
+                    array('name' => 'ICAC', 'logo' => 'https://via.placeholder.com/120x60/2D9B8A/FFFFFF?text=ICAC')
+                )
+            )
+        )
+    ));
+
+    // Bloc Newsletter
+    register_block_type('aca/newsletter', array(
+        'render_callback' => 'aca_render_newsletter_block',
+        'attributes' => array(
+            'title' => array(
+                'type' => 'string',
+                'default' => 'Restez Informé'
+            ),
+            'subtitle' => array(
+                'type' => 'string',
+                'default' => 'Recevez les dernières actualités, analyses de marché et opportunités de la filière cotonnière africaine directement dans votre boîte mail.'
+            ),
+            'buttonText' => array(
+                'type' => 'string',
+                'default' => 'S\'abonner'
+            ),
+            'placeholder' => array(
+                'type' => 'string',
+                'default' => 'Votre adresse email'
+            ),
+            'disclaimer' => array(
+                'type' => 'string',
+                'default' => 'Nous respectons votre vie privée. Désabonnement possible à tout moment.'
+            ),
+            'showFeatures' => array(
+                'type' => 'boolean',
+                'default' => true
+            ),
+            'features' => array(
+                'type' => 'array',
+                'default' => array(
+                    array(
+                        'icon' => 'mail',
+                        'title' => 'Newsletter Hebdomadaire',
+                        'description' => 'Actualités et analyses chaque semaine'
+                    ),
+                    array(
+                        'icon' => 'check-circle',
+                        'title' => 'Contenu Exclusif',
+                        'description' => 'Rapports et études réservés aux abonnés'
+                    ),
+                    array(
+                        'icon' => 'send',
+                        'title' => 'Invitations Prioritaires',
+                        'description' => 'Accès privilégié aux événements ACA'
+                    )
+                )
+            )
+        )
+    ));
+
+    // Bloc Breadcrumb
+    register_block_type('aca/breadcrumb', array(
+        'render_callback' => 'aca_render_breadcrumb_block',
+        'attributes' => array(
+            'items' => array(
+                'type' => 'array',
+                'default' => array(
+                    array('label' => 'Accueil', 'href' => '#'),
+                    array('label' => 'Page Actuelle')
+                )
+            ),
+            'separator' => array(
+                'type' => 'string',
+                'default' => 'chevron-right'
             )
         )
     ));
@@ -251,46 +471,116 @@ add_action('init', 'aca_register_blocks');
 
 // Fonctions de rendu des blocs
 function aca_render_hero_block($attributes) {
-    $title = $attributes['title'];
-    $subtitle = $attributes['subtitle'];
-    $background = $attributes['backgroundImage'];
-    $button_text = $attributes['buttonText'];
-    $button_url = $attributes['buttonUrl'];
+    $slides = $attributes['slides'];
+    $autoplay = $attributes['autoplay'];
+    $showNavigation = $attributes['showNavigation'];
+    $showDots = $attributes['showDots'];
     
     ob_start();
     ?>
-    <section class="aca-hero-block" style="background-image: url('<?php echo esc_url($background); ?>');">
-        <div class="aca-hero-overlay"></div>
-        <div class="container">
-            <div class="aca-hero-content">
-                <h1 class="fade-in-up"><?php echo esc_html($title); ?></h1>
-                <p class="fade-in-up" style="animation-delay: 0.2s;"><?php echo esc_html($subtitle); ?></p>
-                <div class="fade-in-up" style="animation-delay: 0.4s;">
-                    <a href="<?php echo esc_url($button_url); ?>" class="btn btn-primary">
-                        <?php echo esc_html($button_text); ?>
-                    </a>
+    <section class="aca-hero-section">
+        <?php foreach ($slides as $index => $slide): ?>
+            <div class="aca-hero-slide <?php echo $index === 0 ? 'active' : ''; ?>">
+                <div class="aca-hero-background" style="background-image: url('<?php echo esc_url($slide['image']); ?>');">
+                    <div class="aca-hero-overlay"></div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+        
+        <div class="aca-hero-content">
+            <div class="container">
+                <div class="aca-hero-text">
+                    <h1 class="aca-hero-title fade-in-up"><?php echo esc_html($slides[0]['title']); ?></h1>
+                    <p class="aca-hero-subtitle fade-in-up" style="animation-delay: 0.2s;"><?php echo esc_html($slides[0]['subtitle']); ?></p>
+                    <div class="aca-hero-buttons fade-in-up" style="animation-delay: 0.4s;">
+                        <a href="#about" class="btn btn-outline">Découvrir l'ACA</a>
+                        <a href="#contact" class="btn btn-success">Nous Rejoindre</a>
+                    </div>
                 </div>
             </div>
         </div>
+        
+        <?php if ($showNavigation && count($slides) > 1): ?>
+            <button class="aca-hero-nav prev" onclick="acaHeroPrev()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15,18 9,12 15,6"></polyline>
+                </svg>
+            </button>
+            <button class="aca-hero-nav next" onclick="acaHeroNext()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9,18 15,12 9,6"></polyline>
+                </svg>
+            </button>
+        <?php endif; ?>
+        
+        <?php if ($showDots && count($slides) > 1): ?>
+            <div class="aca-hero-dots">
+                <?php foreach ($slides as $index => $slide): ?>
+                    <button class="aca-hero-dot <?php echo $index === 0 ? 'active' : ''; ?>" onclick="acaHeroGoTo(<?php echo $index; ?>)"></button>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
     </section>
+    
+    <script>
+    let acaHeroCurrentSlide = 0;
+    const acaHeroSlides = <?php echo json_encode($slides); ?>;
+    const acaHeroAutoplay = <?php echo $autoplay ? 'true' : 'false'; ?>;
+    
+    function acaHeroGoTo(index) {
+        const slides = document.querySelectorAll('.aca-hero-slide');
+        const dots = document.querySelectorAll('.aca-hero-dot');
+        const title = document.querySelector('.aca-hero-title');
+        const subtitle = document.querySelector('.aca-hero-subtitle');
+        
+        slides[acaHeroCurrentSlide].classList.remove('active');
+        dots[acaHeroCurrentSlide].classList.remove('active');
+        
+        acaHeroCurrentSlide = index;
+        
+        slides[acaHeroCurrentSlide].classList.add('active');
+        dots[acaHeroCurrentSlide].classList.add('active');
+        
+        title.textContent = acaHeroSlides[acaHeroCurrentSlide].title;
+        subtitle.textContent = acaHeroSlides[acaHeroCurrentSlide].subtitle;
+    }
+    
+    function acaHeroNext() {
+        const nextIndex = (acaHeroCurrentSlide + 1) % acaHeroSlides.length;
+        acaHeroGoTo(nextIndex);
+    }
+    
+    function acaHeroPrev() {
+        const prevIndex = (acaHeroCurrentSlide - 1 + acaHeroSlides.length) % acaHeroSlides.length;
+        acaHeroGoTo(prevIndex);
+    }
+    
+    if (acaHeroAutoplay && acaHeroSlides.length > 1) {
+        setInterval(acaHeroNext, 5000);
+    }
+    </script>
     <?php
     return ob_get_clean();
 }
 
 function aca_render_stats_block($attributes) {
     $stats = $attributes['stats'];
+    $animateOnScroll = $attributes['animateOnScroll'];
     
     ob_start();
     ?>
-    <section class="section section-light">
+    <section class="aca-stats-section">
         <div class="container">
-            <div class="aca-stats-block">
-                <?php foreach ($stats as $stat): ?>
-                    <div class="aca-stat-item">
-                        <div class="aca-stat-number">
+            <div class="aca-stats-grid">
+                <?php foreach ($stats as $index => $stat): ?>
+                    <div class="aca-stats-item <?php echo $animateOnScroll ? 'fade-in-up' : ''; ?>">
+                        <div class="aca-stats-icon">
+                            <?php echo aca_get_icon($stat['icon'], 32); ?>
+                        </div>
+                        <div class="aca-stats-number" data-target="<?php echo esc_attr($stat['number']); ?>">
                             <?php echo esc_html($stat['number'] . $stat['suffix']); ?>
                         </div>
-                        <div class="aca-stat-label">
+                        <div class="aca-stats-label">
                             <?php echo esc_html($stat['label']); ?>
                         </div>
                     </div>
@@ -305,12 +595,16 @@ function aca_render_stats_block($attributes) {
 function aca_render_news_block($attributes) {
     $title = $attributes['title'];
     $subtitle = $attributes['subtitle'];
-    $number_of_posts = $attributes['numberOfPosts'];
+    $numberOfPosts = $attributes['numberOfPosts'];
     $category = $attributes['category'];
+    $showExcerpt = $attributes['showExcerpt'];
+    $showReadTime = $attributes['showReadTime'];
+    $showCTA = $attributes['showCTA'];
+    $ctaText = $attributes['ctaText'];
     
     $args = array(
         'post_type' => 'post',
-        'posts_per_page' => $number_of_posts,
+        'posts_per_page' => $numberOfPosts,
         'post_status' => 'publish'
     );
     
@@ -322,167 +616,384 @@ function aca_render_news_block($attributes) {
     
     ob_start();
     ?>
-    <section class="section">
+    <section class="aca-news-section">
         <div class="container">
-            <div class="text-center mb-5">
-                <h2><?php echo esc_html($title); ?></h2>
-                <p><?php echo esc_html($subtitle); ?></p>
+            <div class="aca-news-header">
+                <h2 class="aca-news-title"><?php echo esc_html($title); ?></h2>
+                <p class="aca-news-subtitle"><?php echo esc_html($subtitle); ?></p>
             </div>
             
             <div class="aca-news-grid">
-                <?php foreach ($posts as $post): ?>
-                    <article class="aca-news-item">
-                        <?php if (has_post_thumbnail($post->ID)): ?>
-                            <img src="<?php echo get_the_post_thumbnail_url($post->ID, 'aca-news'); ?>" 
-                                 alt="<?php echo esc_attr($post->post_title); ?>" 
-                                 class="aca-news-image">
-                        <?php endif; ?>
-                        
-                        <div class="aca-news-content">
-                            <div class="aca-news-meta">
-                                <span class="aca-news-category">
-                                    <?php 
-                                    $categories = get_the_category($post->ID);
-                                    echo !empty($categories) ? esc_html($categories[0]->name) : 'Actualités';
-                                    ?>
-                                </span>
-                                <span><?php echo get_the_date('d M Y', $post->ID); ?></span>
+                <?php foreach ($posts as $index => $post): ?>
+                    <article class="aca-news-card fade-in-up">
+                        <div class="aca-news-image-container">
+                            <?php if (has_post_thumbnail($post->ID)): ?>
+                                <img src="<?php echo get_the_post_thumbnail_url($post->ID, 'aca-news'); ?>" 
+                                     alt="<?php echo esc_attr($post->post_title); ?>" 
+                                     class="aca-news-image">
+                            <?php else: ?>
+                                <div class="aca-news-image" style="background: linear-gradient(135deg, var(--aca-primary), var(--aca-secondary)); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">
+                                    📰
+                                </div>
+                            <?php endif; ?>
+                            
+                            <div class="aca-news-category" style="background-color: var(--aca-success);">
+                                <?php 
+                                $categories = get_the_category($post->ID);
+                                echo !empty($categories) ? esc_html($categories[0]->name) : 'Actualités';
+                                ?>
                             </div>
                             
-                            <h3>
+                            <div class="aca-news-date">
+                                <?php echo aca_get_icon('calendar', 16); ?>
+                                <?php echo get_the_date('d M Y', $post->ID); ?>
+                            </div>
+                        </div>
+                        
+                        <div class="aca-news-content">
+                            <h3 class="aca-news-card-title">
                                 <a href="<?php echo get_permalink($post->ID); ?>">
                                     <?php echo esc_html($post->post_title); ?>
                                 </a>
                             </h3>
                             
-                            <p><?php echo wp_trim_words($post->post_excerpt ?: $post->post_content, 20); ?></p>
+                            <?php if ($showExcerpt): ?>
+                                <p class="aca-news-excerpt">
+                                    <?php echo wp_trim_words($post->post_excerpt ?: $post->post_content, 20); ?>
+                                </p>
+                            <?php endif; ?>
                             
-                            <a href="<?php echo get_permalink($post->ID); ?>" class="btn btn-outline">
-                                Lire plus
-                            </a>
+                            <div class="aca-news-meta">
+                                <?php if ($showReadTime): ?>
+                                    <span class="aca-news-read-time">
+                                        <?php echo aca_get_icon('tag', 16); ?>
+                                        5 min de lecture
+                                    </span>
+                                <?php endif; ?>
+                                <a href="<?php echo get_permalink($post->ID); ?>" class="aca-news-read-more">
+                                    Lire plus
+                                    <?php echo aca_get_icon('arrow-right', 16); ?>
+                                </a>
+                            </div>
                         </div>
                     </article>
                 <?php endforeach; ?>
             </div>
+            
+            <?php if ($showCTA): ?>
+                <div class="aca-news-cta">
+                    <a href="<?php echo get_permalink(get_option('page_for_posts')); ?>" class="btn btn-primary">
+                        <?php echo esc_html($ctaText); ?>
+                    </a>
+                </div>
+            <?php endif; ?>
         </div>
     </section>
     <?php
     return ob_get_clean();
 }
 
-function aca_render_team_block($attributes) {
+function aca_render_missions_block($attributes) {
     $title = $attributes['title'];
     $subtitle = $attributes['subtitle'];
-    $members = $attributes['members'];
+    $missions = $attributes['missions'];
+    $showCTA = $attributes['showCTA'];
+    $ctaTitle = $attributes['ctaTitle'];
+    $ctaText = $attributes['ctaText'];
+    $ctaButtonText = $attributes['ctaButtonText'];
     
     ob_start();
     ?>
-    <section class="section section-light">
+    <section class="aca-missions-section">
         <div class="container">
-            <div class="text-center mb-5">
-                <h2><?php echo esc_html($title); ?></h2>
-                <p><?php echo esc_html($subtitle); ?></p>
+            <div class="aca-missions-header">
+                <h2 class="aca-missions-title"><?php echo esc_html($title); ?></h2>
+                <p class="aca-missions-subtitle"><?php echo esc_html($subtitle); ?></p>
             </div>
             
-            <div class="aca-team-grid">
-                <?php foreach ($members as $member): ?>
-                    <div class="aca-team-member">
-                        <?php if (!empty($member['photo'])): ?>
-                            <img src="<?php echo esc_url($member['photo']); ?>" 
-                                 alt="<?php echo esc_attr($member['name']); ?>" 
-                                 class="aca-team-photo">
-                        <?php endif; ?>
-                        
-                        <div class="aca-team-name"><?php echo esc_html($member['name']); ?></div>
-                        <div class="aca-team-position"><?php echo esc_html($member['position']); ?></div>
-                        <p><?php echo esc_html($member['bio']); ?></p>
+            <div class="aca-missions-grid">
+                <?php foreach ($missions as $index => $mission): ?>
+                    <div class="aca-missions-card fade-in-up">
+                        <div class="aca-missions-icon">
+                            <div class="aca-missions-icon-circle" style="background-color: <?php echo esc_attr($mission['color']); ?>">
+                                <?php echo aca_get_icon($mission['icon'], 40); ?>
+                            </div>
+                        </div>
+                        <h3 class="aca-missions-card-title"><?php echo esc_html($mission['title']); ?></h3>
+                        <p class="aca-missions-description"><?php echo esc_html($mission['description']); ?></p>
                     </div>
                 <?php endforeach; ?>
             </div>
+            
+            <?php if ($showCTA): ?>
+                <div class="aca-missions-cta">
+                    <div class="aca-missions-cta-card">
+                        <h3 class="aca-missions-cta-title"><?php echo esc_html($ctaTitle); ?></h3>
+                        <p class="aca-missions-cta-text"><?php echo esc_html($ctaText); ?></p>
+                        <a href="#contact" class="btn btn-success">
+                            <?php echo esc_html($ctaButtonText); ?>
+                        </a>
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
     </section>
     <?php
     return ob_get_clean();
 }
 
-function aca_render_contact_block($attributes) {
+function aca_render_events_block($attributes) {
     $title = $attributes['title'];
     $subtitle = $attributes['subtitle'];
-    $email = $attributes['email'];
-    $phone = $attributes['phone'];
-    $address = $attributes['address'];
+    $numberOfEvents = $attributes['numberOfEvents'];
+    $showCalendar = $attributes['showCalendar'];
+    $events = $attributes['events'];
     
     ob_start();
     ?>
-    <section class="section">
+    <section class="aca-events-section">
         <div class="container">
-            <div class="row">
-                <div class="col-8">
-                    <div class="aca-contact-form">
-                        <h2><?php echo esc_html($title); ?></h2>
-                        <p><?php echo esc_html($subtitle); ?></p>
-                        
-                        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-                            <input type="hidden" name="action" value="aca_contact_form">
-                            <?php wp_nonce_field('aca_contact_nonce', 'aca_contact_nonce'); ?>
-                            
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="aca-form-group">
-                                        <label class="aca-form-label" for="first_name">Prénom *</label>
-                                        <input type="text" id="first_name" name="first_name" class="aca-form-input" required>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="aca-form-group">
-                                        <label class="aca-form-label" for="last_name">Nom *</label>
-                                        <input type="text" id="last_name" name="last_name" class="aca-form-input" required>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="aca-form-group">
-                                <label class="aca-form-label" for="email">Email *</label>
-                                <input type="email" id="email" name="email" class="aca-form-input" required>
-                            </div>
-                            
-                            <div class="aca-form-group">
-                                <label class="aca-form-label" for="subject">Sujet *</label>
-                                <input type="text" id="subject" name="subject" class="aca-form-input" required>
-                            </div>
-                            
-                            <div class="aca-form-group">
-                                <label class="aca-form-label" for="message">Message *</label>
-                                <textarea id="message" name="message" class="aca-form-textarea" required></textarea>
-                            </div>
-                            
-                            <button type="submit" class="btn btn-primary">Envoyer le message</button>
-                        </form>
+            <div class="aca-events-header">
+                <h2 class="aca-events-title"><?php echo esc_html($title); ?></h2>
+                <p class="aca-events-subtitle"><?php echo esc_html($subtitle); ?></p>
+            </div>
+            
+            <div class="aca-events-container">
+                <?php if ($showCalendar): ?>
+                    <div class="aca-events-calendar">
+                        <h3>Calendrier</h3>
+                        <!-- Calendrier simple - peut être étendu avec un vrai calendrier -->
+                        <div style="text-align: center; padding: 2rem; background: var(--aca-light); border-radius: 0.5rem;">
+                            <p>Calendrier des événements</p>
+                        </div>
                     </div>
-                </div>
+                <?php endif; ?>
                 
-                <div class="col-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h3>Contact Rapide</h3>
-                            
-                            <div class="mb-3">
-                                <strong>Email:</strong><br>
-                                <a href="mailto:<?php echo esc_attr($email); ?>"><?php echo esc_html($email); ?></a>
+                <div class="aca-events-list">
+                    <?php foreach (array_slice($events, 0, $numberOfEvents) as $event): ?>
+                        <div class="aca-events-card fade-in-up">
+                            <div class="aca-events-card-content">
+                                <div class="aca-events-date-badge">
+                                    <div class="aca-events-date-day"><?php echo date('d', strtotime($event['date'])); ?></div>
+                                    <div class="aca-events-date-month"><?php echo date('M', strtotime($event['date'])); ?></div>
+                                </div>
+                                
+                                <div class="aca-events-details">
+                                    <h3 class="aca-events-card-title"><?php echo esc_html($event['title']); ?></h3>
+                                    
+                                    <div class="aca-events-meta">
+                                        <div class="aca-events-meta-item">
+                                            <?php echo aca_get_icon('map-pin', 16); ?>
+                                            <span><?php echo esc_html($event['location']); ?></span>
+                                        </div>
+                                        <div class="aca-events-meta-item">
+                                            <?php echo aca_get_icon('clock', 16); ?>
+                                            <span><?php echo esc_html($event['time']); ?></span>
+                                        </div>
+                                        <div class="aca-events-meta-item">
+                                            <?php echo aca_get_icon('users', 16); ?>
+                                            <span><?php echo esc_html($event['participants']); ?> participants attendus</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="aca-events-actions">
+                                        <a href="#" class="btn btn-primary">S'inscrire</a>
+                                        <a href="#" class="btn btn-outline">Voir détails</a>
+                                    </div>
+                                </div>
                             </div>
-                            
-                            <div class="mb-3">
-                                <strong>Téléphone:</strong><br>
-                                <a href="tel:<?php echo esc_attr($phone); ?>"><?php echo esc_html($phone); ?></a>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <strong>Adresse:</strong><br>
-                                <?php echo esc_html($address); ?>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+    </section>
+    <?php
+    return ob_get_clean();
+}
+
+function aca_render_testimonials_block($attributes) {
+    $title = $attributes['title'];
+    $subtitle = $attributes['subtitle'];
+    $testimonials = $attributes['testimonials'];
+    $autoplay = $attributes['autoplay'];
+    $showPartners = $attributes['showPartners'];
+    $partners = $attributes['partners'];
+    
+    ob_start();
+    ?>
+    <section class="aca-testimonials-section">
+        <div class="container">
+            <div class="aca-testimonials-header">
+                <h2 class="aca-testimonials-title"><?php echo esc_html($title); ?></h2>
+                <p class="aca-testimonials-subtitle"><?php echo esc_html($subtitle); ?></p>
+            </div>
+            
+            <div class="aca-testimonials-carousel">
+                <div class="aca-testimonials-card">
+                    <div class="aca-testimonials-quote-icon">
+                        <?php echo aca_get_icon('quote', 48); ?>
+                    </div>
+                    
+                    <div class="aca-testimonials-content">
+                        <blockquote class="aca-testimonials-quote">
+                            "<?php echo esc_html($testimonials[0]['quote']); ?>"
+                        </blockquote>
+                        
+                        <div class="aca-testimonials-author">
+                            <img src="<?php echo esc_url($testimonials[0]['image']); ?>" 
+                                 alt="<?php echo esc_attr($testimonials[0]['name']); ?>" 
+                                 class="aca-testimonials-avatar">
+                            <div class="aca-testimonials-author-info">
+                                <div class="aca-testimonials-author-name"><?php echo esc_html($testimonials[0]['name']); ?></div>
+                                <div class="aca-testimonials-author-position"><?php echo esc_html($testimonials[0]['position']); ?></div>
+                                <div class="aca-testimonials-author-country"><?php echo esc_html($testimonials[0]['country']); ?></div>
                             </div>
                         </div>
                     </div>
                 </div>
+                
+                <?php if (count($testimonials) > 1): ?>
+                    <button class="aca-testimonials-nav prev" onclick="acaTestimonialsPrev()">
+                        <?php echo aca_get_icon('chevron-left', 24); ?>
+                    </button>
+                    <button class="aca-testimonials-nav next" onclick="acaTestimonialsNext()">
+                        <?php echo aca_get_icon('chevron-right', 24); ?>
+                    </button>
+                <?php endif; ?>
+            </div>
+            
+            <?php if (count($testimonials) > 1): ?>
+                <div class="aca-testimonials-dots">
+                    <?php foreach ($testimonials as $index => $testimonial): ?>
+                        <button class="aca-testimonials-dot <?php echo $index === 0 ? 'active' : ''; ?>" onclick="acaTestimonialsGoTo(<?php echo $index; ?>)"></button>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+            
+            <?php if ($showPartners): ?>
+                <div class="aca-testimonials-partners">
+                    <h3 class="aca-testimonials-partners-title">Nos Partenaires Stratégiques</h3>
+                    <p class="aca-testimonials-partners-subtitle">Ensemble pour le développement de la filière cotonnière africaine</p>
+                    
+                    <div class="aca-testimonials-partners-grid">
+                        <?php foreach ($partners as $partner): ?>
+                            <div class="aca-testimonials-partner">
+                                <img src="<?php echo esc_url($partner['logo']); ?>" 
+                                     alt="<?php echo esc_attr($partner['name']); ?>" 
+                                     class="aca-testimonials-partner-logo">
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
+    </section>
+    
+    <script>
+    let acaTestimonialsCurrentIndex = 0;
+    const acaTestimonialsData = <?php echo json_encode($testimonials); ?>;
+    const acaTestimonialsAutoplay = <?php echo $autoplay ? 'true' : 'false'; ?>;
+    
+    function acaTestimonialsGoTo(index) {
+        const quote = document.querySelector('.aca-testimonials-quote');
+        const avatar = document.querySelector('.aca-testimonials-avatar');
+        const name = document.querySelector('.aca-testimonials-author-name');
+        const position = document.querySelector('.aca-testimonials-author-position');
+        const country = document.querySelector('.aca-testimonials-author-country');
+        const dots = document.querySelectorAll('.aca-testimonials-dot');
+        
+        dots[acaTestimonialsCurrentIndex].classList.remove('active');
+        acaTestimonialsCurrentIndex = index;
+        dots[acaTestimonialsCurrentIndex].classList.add('active');
+        
+        const testimonial = acaTestimonialsData[acaTestimonialsCurrentIndex];
+        quote.textContent = '"' + testimonial.quote + '"';
+        avatar.src = testimonial.image;
+        avatar.alt = testimonial.name;
+        name.textContent = testimonial.name;
+        position.textContent = testimonial.position;
+        country.textContent = testimonial.country;
+    }
+    
+    function acaTestimonialsNext() {
+        const nextIndex = (acaTestimonialsCurrentIndex + 1) % acaTestimonialsData.length;
+        acaTestimonialsGoTo(nextIndex);
+    }
+    
+    function acaTestimonialsPrev() {
+        const prevIndex = (acaTestimonialsCurrentIndex - 1 + acaTestimonialsData.length) % acaTestimonialsData.length;
+        acaTestimonialsGoTo(prevIndex);
+    }
+    
+    if (acaTestimonialsAutoplay && acaTestimonialsData.length > 1) {
+        setInterval(acaTestimonialsNext, 5000);
+    }
+    </script>
+    <?php
+    return ob_get_clean();
+}
+
+function aca_render_newsletter_block($attributes) {
+    $title = $attributes['title'];
+    $subtitle = $attributes['subtitle'];
+    $buttonText = $attributes['buttonText'];
+    $placeholder = $attributes['placeholder'];
+    $disclaimer = $attributes['disclaimer'];
+    $showFeatures = $attributes['showFeatures'];
+    $features = $attributes['features'];
+    
+    ob_start();
+    ?>
+    <section class="aca-newsletter-section">
+        <div class="aca-newsletter-pattern">
+            <div class="aca-newsletter-pattern-circle" style="top: 2.5rem; left: 2.5rem; width: 5rem; height: 5rem;"></div>
+            <div class="aca-newsletter-pattern-circle" style="top: 8rem; right: 5rem; width: 4rem; height: 4rem;"></div>
+            <div class="aca-newsletter-pattern-circle" style="bottom: 5rem; left: 25%; width: 3rem; height: 3rem;"></div>
+            <div class="aca-newsletter-pattern-circle" style="bottom: 8rem; right: 33.333333%; width: 6rem; height: 6rem;"></div>
+        </div>
+        
+        <div class="container">
+            <div class="aca-newsletter-content">
+                <div class="aca-newsletter-icon">
+                    <?php echo aca_get_icon('mail', 64); ?>
+                </div>
+                
+                <h2 class="aca-newsletter-title"><?php echo esc_html($title); ?></h2>
+                <p class="aca-newsletter-subtitle"><?php echo esc_html($subtitle); ?></p>
+                
+                <form class="aca-newsletter-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+                    <input type="hidden" name="action" value="aca_newsletter_signup">
+                    <?php wp_nonce_field('aca_newsletter_nonce', 'aca_newsletter_nonce'); ?>
+                    
+                    <div class="aca-newsletter-form-group">
+                        <input type="email" 
+                               name="newsletter_email" 
+                               placeholder="<?php echo esc_attr($placeholder); ?>" 
+                               class="aca-newsletter-input" 
+                               required>
+                        <button type="submit" class="aca-newsletter-submit">
+                            <?php echo aca_get_icon('send', 20); ?>
+                            <?php echo esc_html($buttonText); ?>
+                        </button>
+                    </div>
+                </form>
+                
+                <p class="aca-newsletter-disclaimer"><?php echo esc_html($disclaimer); ?></p>
+                
+                <?php if ($showFeatures): ?>
+                    <div class="aca-newsletter-features">
+                        <?php foreach ($features as $feature): ?>
+                            <div class="aca-newsletter-feature">
+                                <div class="aca-newsletter-feature-icon">
+                                    <?php echo aca_get_icon($feature['icon'], 24); ?>
+                                </div>
+                                <h3 class="aca-newsletter-feature-title"><?php echo esc_html($feature['title']); ?></h3>
+                                <p class="aca-newsletter-feature-description"><?php echo esc_html($feature['description']); ?></p>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </section>
@@ -490,36 +1001,111 @@ function aca_render_contact_block($attributes) {
     return ob_get_clean();
 }
 
-// Traitement du formulaire de contact
-function aca_handle_contact_form() {
-    if (!isset($_POST['aca_contact_nonce']) || !wp_verify_nonce($_POST['aca_contact_nonce'], 'aca_contact_nonce')) {
+function aca_render_breadcrumb_block($attributes) {
+    $items = $attributes['items'];
+    $separator = $attributes['separator'];
+    
+    ob_start();
+    ?>
+    <nav class="aca-breadcrumb-section">
+        <div class="container">
+            <ol class="aca-breadcrumb-nav">
+                <?php foreach ($items as $index => $item): ?>
+                    <li class="aca-breadcrumb-item">
+                        <?php if ($index > 0): ?>
+                            <span class="aca-breadcrumb-separator">
+                                <?php echo aca_get_icon($separator, 16); ?>
+                            </span>
+                        <?php endif; ?>
+                        
+                        <?php if (isset($item['href'])): ?>
+                            <a href="<?php echo esc_url($item['href']); ?>" class="aca-breadcrumb-link">
+                                <?php echo esc_html($item['label']); ?>
+                            </a>
+                        <?php else: ?>
+                            <span class="aca-breadcrumb-current"><?php echo esc_html($item['label']); ?></span>
+                        <?php endif; ?>
+                    </li>
+                <?php endforeach; ?>
+            </ol>
+        </div>
+    </nav>
+    <?php
+    return ob_get_clean();
+}
+
+// Fonction utilitaire pour les icônes
+function aca_get_icon($name, $size = 24) {
+    $icons = array(
+        'users' => '<svg width="' . $size . '" height="' . $size . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>',
+        'globe' => '<svg width="' . $size . '" height="' . $size . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>',
+        'package' => '<svg width="' . $size . '" height="' . $size . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27,6.96 12,12.01 20.73,6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>',
+        'trending-up' => '<svg width="' . $size . '" height="' . $size . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22,7 13.5,15.5 8.5,10.5 2,17"></polyline><polyline points="16,7 22,7 22,13"></polyline></svg>',
+        'target' => '<svg width="' . $size . '" height="' . $size . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>',
+        'calendar' => '<svg width="' . $size . '" height="' . $size . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>',
+        'arrow-right' => '<svg width="' . $size . '" height="' . $size . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12,5 19,12 12,19"></polyline></svg>',
+        'tag' => '<svg width="' . $size . '" height="' . $size . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>',
+        'map-pin' => '<svg width="' . $size . '" height="' . $size . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>',
+        'clock' => '<svg width="' . $size . '" height="' . $size . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12,6 12,12 16,14"></polyline></svg>',
+        'quote' => '<svg width="' . $size . '" height="' . $size . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"></path></svg>',
+        'chevron-left' => '<svg width="' . $size . '" height="' . $size . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15,18 9,12 15,6"></polyline></svg>',
+        'chevron-right' => '<svg width="' . $size . '" height="' . $size . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"></polyline></svg>',
+        'mail' => '<svg width="' . $size . '" height="' . $size . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>',
+        'send' => '<svg width="' . $size . '" height="' . $size . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22,2 15,22 11,13 2,9 22,2"></polygon></svg>',
+        'check-circle' => '<svg width="' . $size . '" height="' . $size . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22,4 12,14.01 9,11.01"></polyline></svg>'
+    );
+    
+    return isset($icons[$name]) ? $icons[$name] : '';
+}
+
+// Traitement du formulaire newsletter
+function aca_handle_newsletter_signup() {
+    if (!isset($_POST['aca_newsletter_nonce']) || !wp_verify_nonce($_POST['aca_newsletter_nonce'], 'aca_newsletter_nonce')) {
         wp_die('Erreur de sécurité');
     }
     
-    $first_name = sanitize_text_field($_POST['first_name']);
-    $last_name = sanitize_text_field($_POST['last_name']);
-    $email = sanitize_email($_POST['email']);
-    $subject = sanitize_text_field($_POST['subject']);
-    $message = sanitize_textarea_field($_POST['message']);
+    $email = sanitize_email($_POST['newsletter_email']);
     
-    // Envoi de l'email
-    $to = get_option('admin_email');
-    $email_subject = 'Nouveau message de contact ACA: ' . $subject;
-    $email_message = "Nom: $first_name $last_name\n";
-    $email_message .= "Email: $email\n\n";
-    $email_message .= "Message:\n$message";
-    
-    $headers = array('Content-Type: text/plain; charset=UTF-8');
-    
-    if (wp_mail($to, $email_subject, $email_message, $headers)) {
-        wp_redirect(add_query_arg('contact', 'success', wp_get_referer()));
-    } else {
-        wp_redirect(add_query_arg('contact', 'error', wp_get_referer()));
+    if (!is_email($email)) {
+        wp_redirect(add_query_arg('newsletter', 'invalid_email', wp_get_referer()));
+        exit;
     }
+    
+    // Ici vous pouvez ajouter l'email à votre service de newsletter
+    // Par exemple, MailChimp, SendGrid, etc.
+    
+    // Pour l'instant, on simule un succès
+    wp_redirect(add_query_arg('newsletter', 'success', wp_get_referer()));
     exit;
 }
-add_action('admin_post_aca_contact_form', 'aca_handle_contact_form');
-add_action('admin_post_nopriv_aca_contact_form', 'aca_handle_contact_form');
+add_action('admin_post_aca_newsletter_signup', 'aca_handle_newsletter_signup');
+add_action('admin_post_nopriv_aca_newsletter_signup', 'aca_handle_newsletter_signup');
+
+// Widgets
+function aca_widgets_init() {
+    register_sidebar(array(
+        'name'          => __('Sidebar Principal', 'aca-theme'),
+        'id'            => 'sidebar-1',
+        'description'   => __('Widgets pour la sidebar principale', 'aca-theme'),
+        'before_widget' => '<div id="%1$s" class="widget %2$s">',
+        'after_widget'  => '</div>',
+        'before_title'  => '<h3 class="widget-title">',
+        'after_title'   => '</h3>',
+    ));
+    
+    for ($i = 1; $i <= 4; $i++) {
+        register_sidebar(array(
+            'name'          => sprintf(__('Footer %d', 'aca-theme'), $i),
+            'id'            => 'footer-' . $i,
+            'description'   => sprintf(__('Colonne %d du footer', 'aca-theme'), $i),
+            'before_widget' => '<div id="%1$s" class="widget %2$s">',
+            'after_widget'  => '</div>',
+            'before_title'  => '<h4 class="widget-title">',
+            'after_title'   => '</h4>',
+        ));
+    }
+}
+add_action('widgets_init', 'aca_widgets_init');
 
 // Customizer
 function aca_customize_register($wp_customize) {
@@ -528,18 +1114,6 @@ function aca_customize_register($wp_customize) {
         'title' => __('Options ACA', 'aca-theme'),
         'priority' => 30,
     ));
-    
-    // Logo
-    $wp_customize->add_setting('aca_logo', array(
-        'default' => '',
-        'sanitize_callback' => 'esc_url_raw',
-    ));
-    
-    $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, 'aca_logo', array(
-        'label' => __('Logo ACA', 'aca-theme'),
-        'section' => 'aca_options',
-        'settings' => 'aca_logo',
-    )));
     
     // Couleur primaire
     $wp_customize->add_setting('aca_primary_color', array(
@@ -554,38 +1128,24 @@ function aca_customize_register($wp_customize) {
     )));
     
     // Informations de contact
-    $wp_customize->add_setting('aca_phone', array(
-        'default' => '+225 27 20 30 40 50',
-        'sanitize_callback' => 'sanitize_text_field',
-    ));
+    $contact_fields = array(
+        'phone' => array('label' => 'Téléphone', 'default' => '+225 27 20 30 40 50', 'type' => 'text'),
+        'email' => array('label' => 'Email', 'default' => 'contact@aca-coton.org', 'type' => 'email'),
+        'address' => array('label' => 'Adresse', 'default' => '123 Avenue de l\'Indépendance, Abidjan, Côte d\'Ivoire', 'type' => 'textarea')
+    );
     
-    $wp_customize->add_control('aca_phone', array(
-        'label' => __('Téléphone', 'aca-theme'),
-        'section' => 'aca_options',
-        'type' => 'text',
-    ));
-    
-    $wp_customize->add_setting('aca_email', array(
-        'default' => 'contact@aca-coton.org',
-        'sanitize_callback' => 'sanitize_email',
-    ));
-    
-    $wp_customize->add_control('aca_email', array(
-        'label' => __('Email', 'aca-theme'),
-        'section' => 'aca_options',
-        'type' => 'email',
-    ));
-    
-    $wp_customize->add_setting('aca_address', array(
-        'default' => '123 Avenue de l\'Indépendance, Abidjan, Côte d\'Ivoire',
-        'sanitize_callback' => 'sanitize_textarea_field',
-    ));
-    
-    $wp_customize->add_control('aca_address', array(
-        'label' => __('Adresse', 'aca-theme'),
-        'section' => 'aca_options',
-        'type' => 'textarea',
-    ));
+    foreach ($contact_fields as $field => $config) {
+        $wp_customize->add_setting('aca_' . $field, array(
+            'default' => $config['default'],
+            'sanitize_callback' => $config['type'] === 'email' ? 'sanitize_email' : 'sanitize_text_field',
+        ));
+        
+        $wp_customize->add_control('aca_' . $field, array(
+            'label' => __($config['label'], 'aca-theme'),
+            'section' => 'aca_options',
+            'type' => $config['type'],
+        ));
+    }
 }
 add_action('customize_register', 'aca_customize_register');
 
@@ -617,336 +1177,17 @@ function aca_darken_color($color, $percent) {
     return sprintf('#%02x%02x%02x', $r, $g, $b);
 }
 
-// Post types personnalisés
-function aca_register_post_types() {
-    // Membres
-    register_post_type('aca_member', array(
-        'labels' => array(
-            'name' => 'Membres',
-            'singular_name' => 'Membre',
-            'add_new' => 'Ajouter un membre',
-            'add_new_item' => 'Ajouter un nouveau membre',
-            'edit_item' => 'Modifier le membre',
-            'new_item' => 'Nouveau membre',
-            'view_item' => 'Voir le membre',
-            'search_items' => 'Rechercher des membres',
-            'not_found' => 'Aucun membre trouvé',
-            'not_found_in_trash' => 'Aucun membre dans la corbeille'
-        ),
-        'public' => true,
-        'has_archive' => true,
-        'supports' => array('title', 'editor', 'thumbnail', 'excerpt'),
-        'menu_icon' => 'dashicons-groups',
-        'rewrite' => array('slug' => 'membres'),
-    ));
-    
-    // Publications
-    register_post_type('aca_publication', array(
-        'labels' => array(
-            'name' => 'Publications',
-            'singular_name' => 'Publication',
-            'add_new' => 'Ajouter une publication',
-            'add_new_item' => 'Ajouter une nouvelle publication',
-            'edit_item' => 'Modifier la publication',
-            'new_item' => 'Nouvelle publication',
-            'view_item' => 'Voir la publication',
-            'search_items' => 'Rechercher des publications',
-            'not_found' => 'Aucune publication trouvée',
-            'not_found_in_trash' => 'Aucune publication dans la corbeille'
-        ),
-        'public' => true,
-        'has_archive' => true,
-        'supports' => array('title', 'editor', 'thumbnail', 'excerpt'),
-        'menu_icon' => 'dashicons-media-document',
-        'rewrite' => array('slug' => 'publications'),
-    ));
-    
-    // Événements
-    register_post_type('aca_event', array(
-        'labels' => array(
-            'name' => 'Événements',
-            'singular_name' => 'Événement',
-            'add_new' => 'Ajouter un événement',
-            'add_new_item' => 'Ajouter un nouvel événement',
-            'edit_item' => 'Modifier l\'événement',
-            'new_item' => 'Nouvel événement',
-            'view_item' => 'Voir l\'événement',
-            'search_items' => 'Rechercher des événements',
-            'not_found' => 'Aucun événement trouvé',
-            'not_found_in_trash' => 'Aucun événement dans la corbeille'
-        ),
-        'public' => true,
-        'has_archive' => true,
-        'supports' => array('title', 'editor', 'thumbnail', 'excerpt'),
-        'menu_icon' => 'dashicons-calendar-alt',
-        'rewrite' => array('slug' => 'evenements'),
-    ));
+// Menu par défaut si aucun menu n'est défini
+function aca_default_menu() {
+    echo '<ul class="d-flex align-center">';
+    echo '<li style="margin-right: 1rem;"><a href="' . home_url() . '" style="color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 0.375rem; transition: all 0.3s ease;">Accueil</a></li>';
+    echo '<li style="margin-right: 1rem;"><a href="#" style="color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 0.375rem; transition: all 0.3s ease;">À Propos</a></li>';
+    echo '<li style="margin-right: 1rem;"><a href="#" style="color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 0.375rem; transition: all 0.3s ease;">Membres</a></li>';
+    echo '<li style="margin-right: 1rem;"><a href="#" style="color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 0.375rem; transition: all 0.3s ease;">Actualités</a></li>';
+    echo '<li style="margin-right: 1rem;"><a href="#" style="color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 0.375rem; transition: all 0.3s ease;">Publications</a></li>';
+    echo '<li><a href="#" style="color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 0.375rem; transition: all 0.3s ease;">Contact</a></li>';
+    echo '</ul>';
 }
-add_action('init', 'aca_register_post_types');
-
-// Taxonomies personnalisées
-function aca_register_taxonomies() {
-    // Type de membre
-    register_taxonomy('member_type', 'aca_member', array(
-        'labels' => array(
-            'name' => 'Types de membre',
-            'singular_name' => 'Type de membre',
-            'search_items' => 'Rechercher des types',
-            'all_items' => 'Tous les types',
-            'edit_item' => 'Modifier le type',
-            'update_item' => 'Mettre à jour le type',
-            'add_new_item' => 'Ajouter un nouveau type',
-            'new_item_name' => 'Nom du nouveau type',
-            'menu_name' => 'Types de membre',
-        ),
-        'hierarchical' => true,
-        'public' => true,
-        'rewrite' => array('slug' => 'type-membre'),
-    ));
-    
-    // Pays
-    register_taxonomy('country', array('aca_member', 'aca_event'), array(
-        'labels' => array(
-            'name' => 'Pays',
-            'singular_name' => 'Pays',
-            'search_items' => 'Rechercher des pays',
-            'all_items' => 'Tous les pays',
-            'edit_item' => 'Modifier le pays',
-            'update_item' => 'Mettre à jour le pays',
-            'add_new_item' => 'Ajouter un nouveau pays',
-            'new_item_name' => 'Nom du nouveau pays',
-            'menu_name' => 'Pays',
-        ),
-        'hierarchical' => true,
-        'public' => true,
-        'rewrite' => array('slug' => 'pays'),
-    ));
-    
-    // Type de publication
-    register_taxonomy('publication_type', 'aca_publication', array(
-        'labels' => array(
-            'name' => 'Types de publication',
-            'singular_name' => 'Type de publication',
-            'search_items' => 'Rechercher des types',
-            'all_items' => 'Tous les types',
-            'edit_item' => 'Modifier le type',
-            'update_item' => 'Mettre à jour le type',
-            'add_new_item' => 'Ajouter un nouveau type',
-            'new_item_name' => 'Nom du nouveau type',
-            'menu_name' => 'Types de publication',
-        ),
-        'hierarchical' => true,
-        'public' => true,
-        'rewrite' => array('slug' => 'type-publication'),
-    ));
-}
-add_action('init', 'aca_register_taxonomies');
-
-// Champs personnalisés avec ACF (si installé)
-function aca_add_meta_boxes() {
-    // Meta box pour les membres
-    add_meta_box(
-        'aca_member_details',
-        'Détails du membre',
-        'aca_member_details_callback',
-        'aca_member',
-        'normal',
-        'high'
-    );
-    
-    // Meta box pour les événements
-    add_meta_box(
-        'aca_event_details',
-        'Détails de l\'événement',
-        'aca_event_details_callback',
-        'aca_event',
-        'normal',
-        'high'
-    );
-    
-    // Meta box pour les publications
-    add_meta_box(
-        'aca_publication_details',
-        'Détails de la publication',
-        'aca_publication_details_callback',
-        'aca_publication',
-        'normal',
-        'high'
-    );
-}
-add_action('add_meta_boxes', 'aca_add_meta_boxes');
-
-function aca_member_details_callback($post) {
-    wp_nonce_field('aca_member_details_nonce', 'aca_member_details_nonce');
-    
-    $company = get_post_meta($post->ID, '_aca_member_company', true);
-    $position = get_post_meta($post->ID, '_aca_member_position', true);
-    $email = get_post_meta($post->ID, '_aca_member_email', true);
-    $phone = get_post_meta($post->ID, '_aca_member_phone', true);
-    $website = get_post_meta($post->ID, '_aca_member_website', true);
-    $address = get_post_meta($post->ID, '_aca_member_address', true);
-    ?>
-    <table class="form-table">
-        <tr>
-            <th><label for="aca_member_company">Entreprise</label></th>
-            <td><input type="text" id="aca_member_company" name="aca_member_company" value="<?php echo esc_attr($company); ?>" class="regular-text" /></td>
-        </tr>
-        <tr>
-            <th><label for="aca_member_position">Poste</label></th>
-            <td><input type="text" id="aca_member_position" name="aca_member_position" value="<?php echo esc_attr($position); ?>" class="regular-text" /></td>
-        </tr>
-        <tr>
-            <th><label for="aca_member_email">Email</label></th>
-            <td><input type="email" id="aca_member_email" name="aca_member_email" value="<?php echo esc_attr($email); ?>" class="regular-text" /></td>
-        </tr>
-        <tr>
-            <th><label for="aca_member_phone">Téléphone</label></th>
-            <td><input type="text" id="aca_member_phone" name="aca_member_phone" value="<?php echo esc_attr($phone); ?>" class="regular-text" /></td>
-        </tr>
-        <tr>
-            <th><label for="aca_member_website">Site web</label></th>
-            <td><input type="url" id="aca_member_website" name="aca_member_website" value="<?php echo esc_attr($website); ?>" class="regular-text" /></td>
-        </tr>
-        <tr>
-            <th><label for="aca_member_address">Adresse</label></th>
-            <td><textarea id="aca_member_address" name="aca_member_address" rows="3" class="large-text"><?php echo esc_textarea($address); ?></textarea></td>
-        </tr>
-    </table>
-    <?php
-}
-
-function aca_event_details_callback($post) {
-    wp_nonce_field('aca_event_details_nonce', 'aca_event_details_nonce');
-    
-    $date = get_post_meta($post->ID, '_aca_event_date', true);
-    $time = get_post_meta($post->ID, '_aca_event_time', true);
-    $location = get_post_meta($post->ID, '_aca_event_location', true);
-    $organizer = get_post_meta($post->ID, '_aca_event_organizer', true);
-    $capacity = get_post_meta($post->ID, '_aca_event_capacity', true);
-    ?>
-    <table class="form-table">
-        <tr>
-            <th><label for="aca_event_date">Date</label></th>
-            <td><input type="date" id="aca_event_date" name="aca_event_date" value="<?php echo esc_attr($date); ?>" /></td>
-        </tr>
-        <tr>
-            <th><label for="aca_event_time">Heure</label></th>
-            <td><input type="time" id="aca_event_time" name="aca_event_time" value="<?php echo esc_attr($time); ?>" /></td>
-        </tr>
-        <tr>
-            <th><label for="aca_event_location">Lieu</label></th>
-            <td><input type="text" id="aca_event_location" name="aca_event_location" value="<?php echo esc_attr($location); ?>" class="regular-text" /></td>
-        </tr>
-        <tr>
-            <th><label for="aca_event_organizer">Organisateur</label></th>
-            <td><input type="text" id="aca_event_organizer" name="aca_event_organizer" value="<?php echo esc_attr($organizer); ?>" class="regular-text" /></td>
-        </tr>
-        <tr>
-            <th><label for="aca_event_capacity">Capacité</label></th>
-            <td><input type="number" id="aca_event_capacity" name="aca_event_capacity" value="<?php echo esc_attr($capacity); ?>" /></td>
-        </tr>
-    </table>
-    <?php
-}
-
-function aca_publication_details_callback($post) {
-    wp_nonce_field('aca_publication_details_nonce', 'aca_publication_details_nonce');
-    
-    $author = get_post_meta($post->ID, '_aca_publication_author', true);
-    $file_url = get_post_meta($post->ID, '_aca_publication_file', true);
-    $file_size = get_post_meta($post->ID, '_aca_publication_size', true);
-    $pages = get_post_meta($post->ID, '_aca_publication_pages', true);
-    $language = get_post_meta($post->ID, '_aca_publication_language', true);
-    ?>
-    <table class="form-table">
-        <tr>
-            <th><label for="aca_publication_author">Auteur</label></th>
-            <td><input type="text" id="aca_publication_author" name="aca_publication_author" value="<?php echo esc_attr($author); ?>" class="regular-text" /></td>
-        </tr>
-        <tr>
-            <th><label for="aca_publication_file">Fichier</label></th>
-            <td>
-                <input type="url" id="aca_publication_file" name="aca_publication_file" value="<?php echo esc_attr($file_url); ?>" class="regular-text" />
-                <button type="button" class="button" onclick="openMediaUploader()">Choisir un fichier</button>
-            </td>
-        </tr>
-        <tr>
-            <th><label for="aca_publication_size">Taille du fichier</label></th>
-            <td><input type="text" id="aca_publication_size" name="aca_publication_size" value="<?php echo esc_attr($file_size); ?>" placeholder="ex: 2.5 MB" /></td>
-        </tr>
-        <tr>
-            <th><label for="aca_publication_pages">Nombre de pages</label></th>
-            <td><input type="number" id="aca_publication_pages" name="aca_publication_pages" value="<?php echo esc_attr($pages); ?>" /></td>
-        </tr>
-        <tr>
-            <th><label for="aca_publication_language">Langue</label></th>
-            <td>
-                <select id="aca_publication_language" name="aca_publication_language">
-                    <option value="fr" <?php selected($language, 'fr'); ?>>Français</option>
-                    <option value="en" <?php selected($language, 'en'); ?>>Anglais</option>
-                </select>
-            </td>
-        </tr>
-    </table>
-    
-    <script>
-    function openMediaUploader() {
-        var mediaUploader = wp.media({
-            title: 'Choisir un fichier',
-            button: {
-                text: 'Utiliser ce fichier'
-            },
-            multiple: false
-        });
-        
-        mediaUploader.on('select', function() {
-            var attachment = mediaUploader.state().get('selection').first().toJSON();
-            document.getElementById('aca_publication_file').value = attachment.url;
-        });
-        
-        mediaUploader.open();
-    }
-    </script>
-    <?php
-}
-
-// Sauvegarde des champs personnalisés
-function aca_save_meta_boxes($post_id) {
-    // Vérification des nonces et permissions
-    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
-    if (!current_user_can('edit_post', $post_id)) return;
-    
-    // Sauvegarde des champs membres
-    if (isset($_POST['aca_member_details_nonce']) && wp_verify_nonce($_POST['aca_member_details_nonce'], 'aca_member_details_nonce')) {
-        $fields = array('company', 'position', 'email', 'phone', 'website', 'address');
-        foreach ($fields as $field) {
-            if (isset($_POST['aca_member_' . $field])) {
-                update_post_meta($post_id, '_aca_member_' . $field, sanitize_text_field($_POST['aca_member_' . $field]));
-            }
-        }
-    }
-    
-    // Sauvegarde des champs événements
-    if (isset($_POST['aca_event_details_nonce']) && wp_verify_nonce($_POST['aca_event_details_nonce'], 'aca_event_details_nonce')) {
-        $fields = array('date', 'time', 'location', 'organizer', 'capacity');
-        foreach ($fields as $field) {
-            if (isset($_POST['aca_event_' . $field])) {
-                update_post_meta($post_id, '_aca_event_' . $field, sanitize_text_field($_POST['aca_event_' . $field]));
-            }
-        }
-    }
-    
-    // Sauvegarde des champs publications
-    if (isset($_POST['aca_publication_details_nonce']) && wp_verify_nonce($_POST['aca_publication_details_nonce'], 'aca_publication_details_nonce')) {
-        $fields = array('author', 'file', 'size', 'pages', 'language');
-        foreach ($fields as $field) {
-            if (isset($_POST['aca_publication_' . $field])) {
-                update_post_meta($post_id, '_aca_publication_' . $field, sanitize_text_field($_POST['aca_publication_' . $field]));
-            }
-        }
-    }
-}
-add_action('save_post', 'aca_save_meta_boxes');
 
 // Sécurité et optimisations
 function aca_security_headers() {

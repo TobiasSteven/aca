@@ -1,133 +1,176 @@
-# Thème WordPress ACA - Association Cotonnière Africaine
+# Thème WordPress ACA - Système de Blocs Complet
 
-Un thème WordPress moderne et professionnel pour l'Association Cotonnière Africaine, avec des blocs Gutenberg personnalisés et une interface d'administration intuitive.
+Un thème WordPress moderne qui transforme votre site React/Vite en système de blocs Gutenberg entièrement modifiables, respectant exactement le design original.
 
-## Fonctionnalités
+## 🎯 **Fonctionnalités Principales**
 
-### 🎨 Design Moderne
-- Interface responsive et mobile-first
-- Palette de couleurs personnalisable
-- Animations et micro-interactions
-- Design system cohérent
+### **Blocs Gutenberg Fidèles au Design Original**
+- **Bloc Hero** : Carrousel avec slides multiples, navigation et dots
+- **Bloc Statistiques** : Compteurs animés avec icônes personnalisables
+- **Bloc Actualités** : Grille d'articles avec métadonnées complètes
+- **Bloc Missions** : Cards avec icônes et CTA intégré
+- **Bloc Événements** : Calendrier et liste d'événements
+- **Bloc Témoignages** : Carrousel avec partenaires
+- **Bloc Newsletter** : Formulaire avec fonctionnalités
+- **Bloc Breadcrumb** : Navigation contextuelle
 
-### 🧩 Blocs Gutenberg Personnalisés
-- **Bloc Hero** : Section d'en-tête avec image de fond et CTA
-- **Bloc Statistiques** : Affichage de chiffres clés avec animations
-- **Bloc Actualités** : Grille d'articles avec filtres
-- **Bloc Équipe** : Présentation des membres de l'équipe
-- **Bloc Contact** : Formulaire de contact intégré
+### **Système de Design Exact**
+- Variables CSS identiques au design original
+- Couleurs, typographie et espacements respectés
+- Animations et transitions fidèles
+- Responsive design complet
+- Icônes SVG intégrées
 
-### 📱 Types de Contenu Personnalisés
-- **Membres** : Gestion des membres de l'association
-- **Publications** : Bibliothèque de documents et ressources
-- **Événements** : Calendrier et gestion d'événements
+### **Interface d'Édition Intuitive**
+- Chaque élément est modifiable dans Gutenberg
+- Aperçu en temps réel
+- Contrôles visuels pour tous les paramètres
+- Validation des données
+- Sauvegarde automatique
 
-### ⚙️ Fonctionnalités Avancées
-- Customizer WordPress intégré
-- Formulaires de contact avec validation
-- Newsletter et abonnements
-- SEO optimisé
-- Performance optimisée
-- Sécurité renforcée
+## 🎨 **Blocs Disponibles**
 
-## Installation
-
-1. **Télécharger le thème**
-   ```bash
-   git clone [repository-url] wp-content/themes/aca-theme
-   ```
-
-2. **Activer le thème**
-   - Aller dans `Apparence > Thèmes` dans l'admin WordPress
-   - Activer le thème "ACA - Association Cotonnière Africaine"
-
-3. **Configuration initiale**
-   - Aller dans `Apparence > Personnaliser`
-   - Configurer le logo, les couleurs et les informations de contact
-   - Créer les menus dans `Apparence > Menus`
-
-## Configuration
-
-### Menus
-Créer deux menus :
-- **Menu Principal** : Navigation principale du site
-- **Menu Footer** : Liens dans le footer
-
-### Widgets
-Le thème inclut plusieurs zones de widgets :
-- Sidebar principale
-- Footer (4 colonnes)
-
-### Pages Recommandées
-Créer les pages suivantes :
-- Accueil (définie comme page d'accueil)
-- À Propos
-- Nos Membres
-- Actualités (définie comme page des articles)
-- Publications
-- Contact
-
-## Utilisation des Blocs
-
-### Bloc Hero
+### **1. Bloc Hero (`/hero`)**
 ```
-/hero
+Paramètres modifiables :
+- Slides multiples (image, titre, sous-titre)
+- Autoplay activé/désactivé
+- Navigation flèches
+- Dots de navigation
+- Boutons CTA personnalisables
 ```
-- Titre principal
-- Sous-titre
-- Image de fond
-- Boutons d'action
 
-### Bloc Statistiques
+### **2. Bloc Statistiques (`/stats`)**
 ```
-/stats
-```
+Paramètres modifiables :
 - Jusqu'à 4 statistiques
-- Animations au scroll
-- Personnalisation des couleurs
+- Icônes personnalisables
+- Nombres et suffixes
+- Labels descriptifs
+- Couleurs d'accent
+- Animation au scroll
+```
 
-### Bloc Actualités
+### **3. Bloc Actualités (`/news`)**
 ```
-/news
-```
+Paramètres modifiables :
+- Titre et sous-titre
 - Nombre d'articles à afficher
 - Filtrage par catégorie
-- Styles de grille ou liste
-
-### Bloc Équipe
+- Affichage des extraits
+- Temps de lecture
+- Bouton CTA personnalisable
 ```
-/team
+
+### **4. Bloc Missions (`/missions`)**
 ```
-- Photos des membres
-- Informations de contact
-- Biographies
-
-### Bloc Contact
+Paramètres modifiables :
+- Titre et description
+- Missions multiples (icône, titre, description)
+- Couleurs personnalisables
+- Section CTA intégrée
+- Textes de call-to-action
 ```
-/contact
+
+### **5. Bloc Événements (`/events`)**
 ```
-- Formulaire intégré
-- Validation côté client
-- Envoi par email
+Paramètres modifiables :
+- Titre et sous-titre
+- Nombre d'événements
+- Calendrier activé/désactivé
+- Événements personnalisés
+- Métadonnées complètes
+```
 
-## Personnalisation
+### **6. Bloc Témoignages (`/testimonials`)**
+```
+Paramètres modifiables :
+- Témoignages multiples
+- Photos et informations
+- Autoplay du carrousel
+- Section partenaires
+- Logos personnalisables
+```
 
-### Couleurs
-Les couleurs peuvent être modifiées dans le Customizer :
-- Couleur primaire : `#2D9B8A`
-- Couleur secondaire : `#A8E6CF`
-- Couleur de succès : `#28A745`
+### **7. Bloc Newsletter (`/newsletter`)**
+```
+Paramètres modifiables :
+- Titre et description
+- Texte du bouton
+- Placeholder de l'input
+- Disclaimer personnalisé
+- Fonctionnalités affichées
+```
 
-### CSS Personnalisé
-Ajouter du CSS personnalisé dans `Apparence > Personnaliser > CSS additionnel`
+### **8. Bloc Breadcrumb (`/breadcrumb`)**
+```
+Paramètres modifiables :
+- Éléments de navigation
+- Séparateur personnalisable
+- Liens et labels
+```
 
-### Hooks et Filtres
-Le thème inclut de nombreux hooks pour la personnalisation :
+## ⚙️ **Installation et Configuration**
 
+### **1. Installation**
+```bash
+# Copier le thème dans WordPress
+cp -r wp-theme /wp-content/themes/aca-theme
+
+# Activer le thème dans l'admin WordPress
+# Aller dans Apparence > Thèmes > Activer "ACA"
+```
+
+### **2. Configuration Initiale**
+```
+1. Aller dans Apparence > Personnaliser
+2. Configurer les couleurs (section "Options ACA")
+3. Renseigner les informations de contact
+4. Créer les menus (principal et footer)
+5. Configurer le logo personnalisé
+```
+
+### **3. Utilisation des Blocs**
+```
+1. Créer une nouvelle page
+2. Ajouter les blocs ACA depuis l'éditeur Gutenberg
+3. Personnaliser chaque bloc selon vos besoins
+4. Prévisualiser et publier
+```
+
+## 🎛️ **Personnalisation Avancée**
+
+### **Couleurs du Thème**
+```css
+:root {
+  --aca-primary: #2D9B8A;        /* Modifiable via Customizer */
+  --aca-primary-dark: #1F6B5C;   /* Auto-calculé */
+  --aca-secondary: #A8E6CF;
+  --aca-success: #28A745;
+  --aca-warning: #FD7E14;
+  --aca-danger: #DC3545;
+}
+```
+
+### **Ajout de Nouveaux Blocs**
+```php
+// Dans functions.php
+register_block_type('aca/nouveau-bloc', array(
+    'render_callback' => 'aca_render_nouveau_bloc',
+    'attributes' => array(
+        'titre' => array(
+            'type' => 'string',
+            'default' => 'Titre par défaut'
+        )
+    )
+));
+```
+
+### **Hooks Disponibles**
 ```php
 // Modifier les couleurs par défaut
 add_filter('aca_default_colors', function($colors) {
-    $colors['primary'] = '#your-color';
+    $colors['primary'] = '#votre-couleur';
     return $colors;
 });
 
@@ -137,139 +180,172 @@ add_action('aca_after_header', function() {
 });
 ```
 
-## Types de Contenu
+## 📱 **Responsive Design**
 
-### Membres
-Champs disponibles :
-- Nom/Entreprise
-- Type de membre
-- Pays
-- Contact (email, téléphone, site web)
-- Description
-- Logo/Photo
+### **Breakpoints**
+```css
+/* Mobile */
+@media (max-width: 640px) { ... }
 
-### Publications
-Champs disponibles :
-- Titre
-- Auteur
-- Type de publication
-- Fichier PDF
-- Langue
-- Nombre de pages
+/* Tablet */
+@media (min-width: 768px) { ... }
 
-### Événements
-Champs disponibles :
-- Date et heure
-- Lieu
-- Organisateur
-- Capacité
-- Description
+/* Desktop */
+@media (min-width: 1024px) { ... }
+```
 
-## Sécurité
+### **Adaptations Mobiles**
+- Navigation hamburger automatique
+- Grilles qui deviennent colonnes uniques
+- Tailles de police adaptatives
+- Espacements réduits
+- Boutons pleine largeur
 
-Le thème inclut plusieurs mesures de sécurité :
-- Validation et échappement des données
-- Protection CSRF avec nonces
-- Headers de sécurité
-- Sanitisation des entrées utilisateur
+## 🔧 **Fonctionnalités Techniques**
 
-## Performance
-
-Optimisations incluses :
-- CSS et JS minifiés
+### **Performance**
+- CSS et JS optimisés
 - Lazy loading des images
-- Cache des requêtes
-- Optimisation des images
+- Cache intelligent
+- Minification automatique
 - CDN ready
 
-## Support et Maintenance
+### **SEO**
+- Structure HTML sémantique
+- Meta données optimisées
+- Schema markup intégré
+- URLs propres
+- Sitemap automatique
 
-### Logs d'Erreurs
-Les erreurs sont loggées dans `/wp-content/debug.log` si `WP_DEBUG` est activé.
+### **Sécurité**
+- Validation des données
+- Protection CSRF
+- Sanitisation des entrées
+- Headers de sécurité
+- Nonces WordPress
 
-### Mise à Jour
-Pour mettre à jour le thème :
-1. Sauvegarder les personnalisations
+### **Accessibilité**
+- Navigation clavier complète
+- ARIA labels appropriés
+- Contraste WCAG 2.1 AA
+- Focus visible
+- Screen readers compatibles
+
+## 📊 **Gestion du Contenu**
+
+### **Types de Contenu Supportés**
+- Articles WordPress standard
+- Pages avec blocs personnalisés
+- Menus de navigation
+- Widgets dans sidebars
+- Customizer WordPress
+
+### **Formulaires Intégrés**
+- Newsletter avec validation
+- Contact (extensible)
+- Recherche avancée
+- Commentaires stylisés
+
+## 🎯 **Cas d'Usage**
+
+### **Page d'Accueil Complète**
+```
+1. Ajouter le bloc Hero
+2. Configurer les slides
+3. Ajouter le bloc Statistiques
+4. Personnaliser les chiffres
+5. Ajouter les autres blocs selon vos besoins
+```
+
+### **Page À Propos**
+```
+1. Bloc Breadcrumb pour la navigation
+2. Bloc Hero avec une seule slide
+3. Bloc Missions pour présenter l'organisation
+4. Bloc Témoignages pour la crédibilité
+```
+
+### **Page Actualités**
+```
+1. Bloc Breadcrumb
+2. Bloc Actualités avec filtres
+3. Pagination automatique
+4. Sidebar avec widgets
+```
+
+## 🔄 **Mises à Jour**
+
+### **Sauvegarde Avant Mise à Jour**
+```bash
+# Sauvegarder les personnalisations
+cp -r /wp-content/themes/aca-theme/style.css /backup/
+cp -r /wp-content/uploads/customizations/ /backup/
+```
+
+### **Processus de Mise à Jour**
+```
+1. Sauvegarder le site complet
 2. Remplacer les fichiers du thème
 3. Vérifier la compatibilité
-
-### Support
-Pour obtenir de l'aide :
-- Documentation : [lien vers la documentation]
-- Issues : [lien vers le système de tickets]
-- Email : support@aca-theme.com
-
-## Développement
-
-### Structure des Fichiers
-```
-aca-theme/
-├── style.css
-├── functions.php
-├── index.php
-├── header.php
-├── footer.php
-├── sidebar.php
-├── single.php
-├── page.php
-├── front-page.php
-├── assets/
-│   ├── css/
-│   │   ├── blocks.css
-│   │   └── editor-style.css
-│   ├── js/
-│   │   └── main.js
-│   └── images/
-├── blocks/
-│   ├── hero/
-│   ├── stats/
-│   ├── news/
-│   ├── team/
-│   └── contact/
-├── inc/
-│   ├── customizer.php
-│   ├── post-types.php
-│   └── blocks.php
-└── templates/
-    ├── single-aca_member.php
-    ├── single-aca_publication.php
-    └── single-aca_event.php
+4. Tester toutes les fonctionnalités
+5. Restaurer les personnalisations si nécessaire
 ```
 
-### Environnement de Développement
-1. WordPress 5.0+
-2. PHP 7.4+
-3. Node.js (pour la compilation des assets)
+## 🆘 **Support et Dépannage**
 
-### Build Process
-```bash
-# Installer les dépendances
-npm install
+### **Problèmes Courants**
+```
+Q: Les blocs n'apparaissent pas dans Gutenberg
+R: Vérifier que les fonctions sont bien enregistrées dans functions.php
 
-# Compiler les assets
-npm run build
+Q: Les styles ne s'appliquent pas
+R: Vider le cache et vérifier l'enqueue des CSS
 
-# Mode développement
-npm run dev
-
-# Watch mode
-npm run watch
+Q: Les animations ne fonctionnent pas
+R: Vérifier que JavaScript est activé et les scripts chargés
 ```
 
-## Licence
+### **Debug Mode**
+```php
+// Dans wp-config.php pour le debug
+define('WP_DEBUG', true);
+define('WP_DEBUG_LOG', true);
+define('WP_DEBUG_DISPLAY', false);
+```
 
-Ce thème est sous licence GPL v2 ou ultérieure.
+## 📈 **Optimisations Recommandées**
 
-## Changelog
+### **Performance**
+- Utiliser un plugin de cache (WP Rocket, W3 Total Cache)
+- Optimiser les images (WebP, compression)
+- Minifier CSS/JS en production
+- Utiliser un CDN
 
-### Version 1.0.0
-- Version initiale
-- Blocs Gutenberg personnalisés
-- Types de contenu personnalisés
-- Interface d'administration
-- Responsive design
-- Optimisations SEO et performance
+### **SEO**
+- Installer Yoast SEO ou RankMath
+- Configurer Google Analytics
+- Optimiser les meta descriptions
+- Créer un sitemap XML
+
+## 🎨 **Personnalisation du Design**
+
+### **Modifier les Couleurs**
+```
+1. Aller dans Apparence > Personnaliser
+2. Section "Options ACA"
+3. Modifier la couleur primaire
+4. Les autres couleurs s'adaptent automatiquement
+```
+
+### **Ajouter des Polices**
+```php
+// Dans functions.php
+function aca_custom_fonts() {
+    wp_enqueue_style('custom-fonts', 'https://fonts.googleapis.com/css2?family=VotrePolice:wght@400;600;700&display=swap');
+}
+add_action('wp_enqueue_scripts', 'aca_custom_fonts');
+```
 
 ---
 
-**Développé avec ❤️ pour l'Association Cotonnière Africaine**
+**Développé avec ❤️ pour respecter exactement votre design original tout en offrant une flexibilité maximale d'édition dans WordPress.**
